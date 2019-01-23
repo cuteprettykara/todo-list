@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
   onChange: Input 변경 이벤트
   onInsert: 추가버튼 클릭 이벤트
 */
-const TodoInput = ({value, onChage, onInsert}) => {
+const TodoInput = ({value, onChange, onInsert}) => {
 
   // 엔터키가 눌리면 onInsert 를 실행합니다.
   const handleKeyPress = e => {
@@ -22,7 +22,7 @@ const TodoInput = ({value, onChage, onInsert}) => {
 
   return (
     <div className={cx('todo-input')}>
-      <input value={value} onChange={onChage} onKeyPress={handleKeyPress} />
+      <input value={value} onChange={onChange} onKeyPress={handleKeyPress} />
       <div className={cx('add-button')} onClick={onInsert}>추가</div>
     </div>
   );
