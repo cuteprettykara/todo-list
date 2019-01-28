@@ -8,8 +8,12 @@ const initialState = {
   ]
 };
 
+let id = initialState.todos.length-1;
+const getId = () => ++id;
+
 const reducers = (state = initialState, action) => {
   const { input, todos } = state;
+
 
   switch (action.type) {
     case types.CHANGE:
@@ -24,7 +28,7 @@ const reducers = (state = initialState, action) => {
         todos: [
           ...todos,
           {
-            id: todos.length,
+            id: getId(),
             text: input,
             done: false
           }
@@ -34,7 +38,7 @@ const reducers = (state = initialState, action) => {
     case types.TOGGLE:
       return {
         input: input,
-        todos: todos.map((todo, index) =>
+        todos: todos.map(todo =>
           (todo.id === action.id)
             ? {
                ...todo,
