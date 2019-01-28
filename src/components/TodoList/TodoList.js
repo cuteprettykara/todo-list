@@ -6,11 +6,12 @@ class TodoList extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.todos !== nextProps.todos;
   }
-  
+
   render() {
     const { todos, onToggle, onRemove } = this.props;
+
     const todoList = todos.map(todo => (
-      <TodoItem 
+      <TodoItem
         key={todo.id}
         done={todo.done}
         onToggle={()=>onToggle(todo.id)}
