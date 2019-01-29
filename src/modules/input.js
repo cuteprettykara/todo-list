@@ -1,4 +1,4 @@
-const SET_INPUT = 'SET_INPUT';
+const SET_INPUT = 'input/SET_INPUT';
 
 export const setInput = value => ({
   type: SET_INPUT,

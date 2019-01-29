@@ -1,6 +1,6 @@
-const INSERT = 'INSERT';
-const TOGGLE = 'TOGGLE';
-const REMOVE = 'REMOVE';
+const INSERT = 'todos/INSERT';
+const TOGGLE = 'todos/TOGGLE';
+const REMOVE = 'todos/REMOVE';
 
 export const insert = (todo) => ({
   type: INSERT,
