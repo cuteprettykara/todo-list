@@ -1,43 +1,43 @@
-import * as types from '../actions/ActionTypes';
+const INSERT = 'INSERT';
+const TOGGLE = 'TOGGLE';
+const REMOVE = 'REMOVE';
+
+export const insert = (todo) => ({
+  type: INSERT,
+  todo
+});
+
+export const toggle = id => ({
+  type: TOGGLE,
+  id
+});
+
+export const remove = id => ({
+  type: REMOVE,
+  id
+});
 
 const initialState = {
-  input: '',
   todos: [
     { id:0, text: '리액트 공부하기', done: true },
     { id:1, text: '컴포넌트 스타일링 해보기', done: false }
   ]
 };
 
-let id = initialState.todos.length-1;
-const getId = () => ++id;
-
-const reducers = (state = initialState, action) => {
-  const { input, todos } = state;
-
+const todosReducer = (state = initialState, action) => {
+  const { todos } = state;
 
   switch (action.type) {
-    case types.CHANGE:
+    case INSERT:
       return {
-        input: action.event.target.value,
-        todos: todos
-      };
-
-    case types.INSERT:
-      return {
-        input: '',
         todos: [
           ...todos,
-          {
-            id: getId(),
-            text: input,
-            done: false
-          }
+          action.todo
         ]
       };
 
-    case types.TOGGLE:
+    case TOGGLE:
       return {
-        input: input,
         todos: todos.map(todo =>
           (todo.id === action.id)
             ? {
@@ -49,9 +49,8 @@ const reducers = (state = initialState, action) => {
         )
       };
 
-    case types.REMOVE:
+    case REMOVE:
       return {
-        input: input,
         todos: todos.filter(todo => todo.id !== action.id)
       }
 
@@ -60,4 +59,4 @@ const reducers = (state = initialState, action) => {
   }
 };
 
-export default reducers;
+export default todosReducer;
