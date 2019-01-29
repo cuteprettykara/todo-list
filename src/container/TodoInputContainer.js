@@ -1,39 +1,68 @@
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TodoInput from '../components/TodoInput';
 import * as inputActions from '../modules/input';
 import * as todosActions from '../modules/todos';
+import { bindActionCreators } from 'redux';
 
-let id = 1;
-const getId = () => ++id;
+class TodoInputContainer extends Component {
+  id = 1
+  getId = () => ++this.id;
 
-const mapStateToProps = state => ({
-  value: state.inputReducer.input
-});
-
-const mapDispatchToProps = dispatch => ({
-  onChange: e => dispatch(inputActions.setInput(e.target.value)),
-  onInsert: input => {
-    dispatch(todosActions.insert({
-      id: getId(),
-      text: input,
-      done: false
-    }));
-    dispatch(inputActions.setInput(''));
+  handleChange = e => {
+    const { InputActions } = this.props;
+    InputActions.setInput(e.target.value);
   }
-});
 
-const mergeProps = (state, dispatch) => {
-  return {
-    ...state,
-    ...dispatch,
-    onInsert: () => dispatch.onInsert(state.value)
-  };
-};
+  handleInsert = () => {
+    const { InputActions, TodosActions, value } = this.props;
 
-const TodoInputContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
-)(TodoInput);
+    TodosActions.insert({
+      id: this.getId(),
+      text: value,
+      done: false
+    });
 
-export default TodoInputContainer;
+    InputActions.setInput('');
+  }
+
+  render() {
+    const { value } = this.props;
+    const { handleChange, handleInsert } = this;
+
+    return (
+      <div>
+        <TodoInput
+          value={value}
+          onChange={handleChange}
+          onInsert={handleInsert}
+        />
+      </div>
+    );
+  }
+}
+
+
+export default connect(
+  state => ({
+    value: state.inputReducer.input
+  }),
+  dispatch => ({
+    /* bindActionCreators를 사용하면 다음 작업들을 자동으로 해줍니다:
+      {
+          actionCreator: (...params) => dispatch(actionCreator(...params))
+      }
+
+      그래서 이전에 우리가 했었던 것처럼 하나하나 dispatch할 필요가 없습니다.
+      예를 들면 InputActions의 경우 다음과 같은 작업이 되어 있는 것이죠.
+
+      InputActions: {
+        setInput: (value) => dispatch(inputActions.setInput(value))
+      }
+
+      나중에 이를 호출할 때는 this.props.InputActions.setInput을 호출하면 됩니다.
+    */
+    InputActions: bindActionCreators(inputActions, dispatch),
+    TodosActions: bindActionCreators(todosActions, dispatch)
+  })
+)(TodoInputContainer);

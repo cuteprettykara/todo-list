@@ -1,21 +1,12 @@
+import { createAction, handleActions } from 'redux-actions';
+
 const INSERT = 'todos/INSERT';
 const TOGGLE = 'todos/TOGGLE';
 const REMOVE = 'todos/REMOVE';
 
-export const insert = (todo) => ({
-  type: INSERT,
-  todo
-});
-
-export const toggle = id => ({
-  type: TOGGLE,
-  id
-});
-
-export const remove = id => ({
-  type: REMOVE,
-  id
-});
+export const insert = createAction(INSERT);
+export const toggle = createAction(TOGGLE);
+export const remove = createAction(REMOVE);
 
 const initialState = {
   todos: [
@@ -24,39 +15,46 @@ const initialState = {
   ]
 };
 
-const todosReducer = (state = initialState, action) => {
-  const { todos } = state;
+export default handleActions({
+  [INSERT]: (state, action) => {
+    const { todos } = state;
+    const { payload: todo } = action;
 
-  switch (action.type) {
-    case INSERT:
-      return {
-        todos: [
-          ...todos,
-          action.todo
-        ]
-      };
+    return {
+      todos: [
+        ...todos,
+        todo
+      ]
+    };
+  },
 
-    case TOGGLE:
-      return {
-        todos: todos.map(todo =>
-          (todo.id === action.id)
-            ? {
-               ...todo,
-               done: !todo.done
+  [TOGGLE]: (state, action) => {
+    const { payload: id } = action;
+    const { todos } = state;
+    // = const id = action.payload;
+    /* 비구조화 할당을 통하여 id라는 레퍼런스에 action.payload란 값을 넣습니다.
+    이 작업이 필수는 아니지만, 나중에 이 코드를 보게 되었을 때 여기서의 payload가
+    어떤 값을 의미하는지 이해하기 쉬워집니다. */
 
-            }
-            : todo
-        )
-      };
+    return {
+      todos: todos.map(todo =>
+        (todo.id === id)
+          ? {
+             ...todo,
+             done: !todo.done
 
-    case REMOVE:
-      return {
-        todos: todos.filter(todo => todo.id !== action.id)
-      }
+          }
+          : todo
+      )
+    };
+  },
 
-    default:
-      return state;
+  [REMOVE]: (state, action) => {
+    const { payload: id } = action;
+    const { todos } = state;
+
+    return {
+      todos: todos.filter(todo => todo.id !== id)
+    }
   }
-};
-
-export default todosReducer;
+}, initialState);

@@ -1,24 +1,16 @@
+import { createAction, handleActions } from 'redux-actions';
+
 const SET_INPUT = 'input/SET_INPUT';
 
-export const setInput = value => ({
-  type: SET_INPUT,
-  value
-});
+export const setInput = createAction(SET_INPUT);
 
 const initialState = {
   input: ''
 };
 
-const inputReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case SET_INPUT:
-      return {
-        input: action.value
-      };
-
-    default:
-      return state;
+export default handleActions({
+  [SET_INPUT]: (state, action) => {
+    const { payload: value } = action;
+    return {input: value};
   }
-};
-
-export default inputReducer;
+}, initialState);
