@@ -18,12 +18,20 @@ const initialState = {
 export default handleActions({
   [INSERT]: (state, action) => {
     const { todos } = state;
-    const { payload: todo } = action;
+    /* payload 안에 있는 id, text, done에 대한 레퍼런스를 만들어줍니다.
+    레퍼런스를 만들지 않고, 바로 push(Map(action.payload))를 해도 되지만,
+    나중에 이 코드를 보게 됐을 때, 
+    이 액션이 어떤 데이터를 처리하는지 쉽게 보기 위해서 하는 작업입니다. */
+    const { id, text, done } = action.payload;
 
     return {
       todos: [
         ...todos,
-        todo
+        {
+          id: id,
+          text: text,
+          done: done
+        }
       ]
     };
   },
