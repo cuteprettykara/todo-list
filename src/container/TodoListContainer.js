@@ -33,7 +33,7 @@ class TodoListContainer extends Component {
 
 export default connect(
   state => ({
-    todos: state.todosReducer.todos
+    todos: state.todos
   }),
   dispatch => ({
     TodosActions: bindActionCreators(todosActions, dispatch)

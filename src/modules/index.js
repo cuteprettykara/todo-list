@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import inputReducer from './input';
-import todosReducer from './todos';
+import input from './input';
+import todos from './todos';
 
 export default combineReducers({
-  inputReducer,
-  todosReducer
+  input,
+  todos
 });

@@ -45,9 +45,7 @@ class TodoInputContainer extends Component {
 /* 이번에는 mapStateToProps와 mapDispatchToProps 함수에 대한 레퍼런스를
 따로 만들지 않고, 그 내부에 바로 정의해주었습니다.*/
 export default connect(
-  state => ({
-    value: state.inputReducer.input
-  }),
+  state => ({value: state.input.value}),
   dispatch => ({
     /* bindActionCreators를 사용하면 다음 작업들을 자동으로 해줍니다:
       {
