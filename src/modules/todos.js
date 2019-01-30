@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
+import { Map, List } from 'immutable';
 
 const INSERT = 'todos/INSERT';
 const TOGGLE = 'todos/TOGGLE';
@@ -8,19 +9,21 @@ export const insert = createAction(INSERT);
 export const toggle = createAction(TOGGLE);
 export const remove = createAction(REMOVE);
 
-const initialState = [
-  { id:0, text: '리액트 공부하기', done: true },
-  { id:1, text: '컴포넌트 스타일링 해보기', done: false }
-];
+const initialState = List([
+  Map({ id:0, text: '리액트 공부하기', done: true }),
+  Map({ id:1, text: '컴포넌트 스타일링 해보기', done: false })
+]);
 
 export default handleActions({
   [INSERT]: (state, action) => {
     /* payload 안에 있는 id, text, done에 대한 레퍼런스를 만들어줍니다.
     레퍼런스를 만들지 않고, 바로 push(Map(action.payload))를 해도 되지만,
-    나중에 이 코드를 보게 됐을 때, 
+    나중에 이 코드를 보게 됐을 때,
     이 액션이 어떤 데이터를 처리하는지 쉽게 보기 위해서 하는 작업입니다. */
     const { id, text, done } = action.payload;
 
+    // before immutable
+  /*
     return [
       ...state,
       {
@@ -28,7 +31,14 @@ export default handleActions({
         text: text,
         done: done
       }
-    ];
+    ] */;
+
+    // after immutable
+    return state.push(Map({
+      id,
+      text,
+      done
+    }));
   },
 
   [TOGGLE]: (state, action) => {
@@ -38,6 +48,8 @@ export default handleActions({
     이 작업이 필수는 아니지만, 나중에 이 코드를 보게 되었을 때 여기서의 payload가
     어떤 값을 의미하는지 이해하기 쉬워집니다. */
 
+    // before immutable
+/*
     return state.map(todo =>
         (todo.id === id)
           ? {
@@ -46,12 +58,19 @@ export default handleActions({
 
           }
           : todo
-      );
+    ); */
+
+    // after immutable
+    return state.map(todo =>
+      (todo.get('id') === id)
+        ? todo.set('done', !todo.get('done'))
+        : todo
+    );
   },
 
   [REMOVE]: (state, action) => {
     const { payload: id } = action;
 
-    return state.filter(todo => todo.id !== id);
+    return state.filter(todo => todo.get('id') !== id);
   }
 }, initialState);
